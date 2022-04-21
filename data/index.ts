@@ -1,3 +1,4 @@
 export * from './classes/MicraError';
-export * from './errors/ValidationError';
+export * from './classes/ValidationError';
+export * from './classes/WrappedError';
 export * from './utilities/isMicraError';
