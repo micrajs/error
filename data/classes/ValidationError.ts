@@ -1,4 +1,4 @@
-import {MicraError} from '../classes/MicraError';
+import {MicraError} from './MicraError';
 
 export class ValidationError<Fields extends string = string>
   extends MicraError
