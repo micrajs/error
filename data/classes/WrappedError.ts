@@ -1,21 +1,36 @@
 import {MicraError} from './MicraError';
 
 export class WrappedError extends MicraError {
-  statusCode = 500;
+  errorMessage: Micra.ErrorMessage;
 
-  constructor(error: Error) {
+  get statusCode() {
+    return this.errorMessage.status;
+  }
+
+  constructor(
+    error: Error,
+    {
+      status = 500,
+      extras,
+      instance,
+      title = 'Internal Server Error',
+      type,
+    }: Omit<Partial<Micra.ErrorMessage>, 'detail'> = {},
+  ) {
     super(error.message);
     Object.assign(this, error);
     Object.setPrototypeOf(this, WrappedError.prototype);
+    this.errorMessage = {
+      status,
+      extras,
+      instance,
+      title,
+      type,
+      detail: error.message,
+    };
   }
 
   serialize(): Micra.ErrorMessage[] {
-    return [
-      {
-        status: this.statusCode,
-        title: 'Internal Server Error',
-        detail: this.message,
-      },
-    ];
+    return [this.errorMessage];
   }
 }
