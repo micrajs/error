@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any */
-import {MICRA_ERROR_SYMBOL, MICRA_ERROR_TYPE} from '../constants';
+import {MICRA_ERROR_SYMBOL} from '../constants';
 
 /**
  * It checks if the given value is an instance of Micra.Error.
@@ -17,7 +17,7 @@ export function isMicraError(maybeError: any): maybeError is Micra.Error {
       maybeError.stack != null &&
       maybeError.statusCode != null &&
       maybeError.serialize != null &&
-      maybeError[MICRA_ERROR_SYMBOL] === MICRA_ERROR_TYPE
+      maybeError[MICRA_ERROR_SYMBOL] === true
     );
   } catch (e) {
     return false;

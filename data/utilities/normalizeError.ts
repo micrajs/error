@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {WrappedError} from '../classes/WrappedError';
 import {isMicraError} from './isMicraError';
+import {isError} from './isError';
+import {MICRA_ERROR_SYMBOL} from '../constants';
 
 /**
  * It normalizes the given value to an instance of Micra.Error.
@@ -12,20 +14,26 @@ export function normalizeError(value: any): Micra.Error {
   if (isMicraError(value)) {
     return value;
   }
+  if (isError(value)) {
+    const micraError = value as Micra.Error;
+    (micraError as any)[MICRA_ERROR_SYMBOL] = true;
+    micraError.statusCode = 500;
+    micraError.serialize = () => [
+      {
+        status: 500,
+        title: 'Internal Server Error',
+        detail: micraError.message,
+      },
+    ];
 
-  const error =
-    value &&
-    typeof value === 'object' &&
-    value.stack &&
-    value.message &&
-    typeof value.stack === 'string' &&
-    typeof value.message === 'string'
-      ? value
-      : new Error(
-          JSON.stringify(
-            `Non-standard value thrown while running application: ${value}`,
-          ),
-        );
+    return micraError;
+  }
 
-  return new WrappedError(error);
+  return new WrappedError(
+    new Error(
+      JSON.stringify(
+        `Non-standard value thrown while running application: ${value}`,
+      ),
+    ),
+  );
 }
