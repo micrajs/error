@@ -1,5 +1,5 @@
-import {MicraError} from '@/data/classes/MicraError';
-import {isMicraError} from '@/data/utilities/isMicraError';
+import {MicraError} from '../../../data/classes/MicraError';
+import {isMicraError} from '../../../data/utilities/isMicraError';
 
 describe('isMicraError tests', () => {
   it('should return true if it is a Micra.Error', () => {
